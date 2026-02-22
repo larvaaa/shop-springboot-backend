@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: shopping
+
+  kafka:
+    bootstrap-servers: localhost:9092   # 카프카 주소
+    consumer:
+      group-id: my-group                # 컨슈머 그룹
+      auto-offset-reset: earliest       # 처음부터 읽기
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  batch:
+    jdbc:
+      initialize-schema: never
+    job:
+      enabled: false
+      names: sampleJob
+
+  datasource:
+    url: jdbc:mysql://3.39.177.249:3306/shopping?useSSL=false&serverTimezone=Asia/Seoul
+    username: user01
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    p6spy:
+#      enable-logging: true
+#      multiline: true
+#      logging: slf4j
+#      tracing:
+#        include-parameter-values: true
+
+  jpa:
+    hibernate:
+      ddl-auto: none # ???? ?????? ???? ???? (none, update, create, create-drop)
+    properties:
+      hibernate:
+#        show-sql: true # SQL ?? ??
+        format_sql: true
+        default_batch_fetch_size: 100
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework:
+      security: TRACE
+      batch: DEBUG
+
+jwt:
+  secret-key: abcdefghijklmnopqrstuvwxyzabcdef
+  access-token-expiration-time: 1_800_000
+  refresh-token-expiration-time: 1_209_600_000
+
+
+
+
