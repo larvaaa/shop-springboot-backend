@@ -1,6 +1,5 @@
 package com.shopping.member.entity
 
-import com.querydsl.core.annotations.QueryTransient
 import jakarta.persistence.*
 import org.springframework.security.core.GrantedAuthority
 
