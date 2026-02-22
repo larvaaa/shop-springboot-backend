@@ -1,0 +1,43 @@
+server:
+  port: 8000
+
+spring:
+  config:
+    import: "classpath:application-core.yml"
+
+  application:
+    name: apigateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: member-service
+          uri: lb://MEMBER-SERVICE
+          predicates:
+            - Path=/member-service/**
+          filters:
+            - RewritePath=/member-service/(?<segment>.*), /$\{segment}
+        - id: admin-service
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/admin-service/**
+          filters:
+            - RewritePath=/admin-service/(?<segment>.*), /$\{segment}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/oauth2/jwks
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.springframework.security.web.server: INFO

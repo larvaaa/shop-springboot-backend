@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/admin-service" />
+            <option value="$PROJECT_DIR$/apigateway-service" />
+            <option value="$PROJECT_DIR$/batch-service" />
+            <option value="$PROJECT_DIR$/delivery-service" />
+            <option value="$PROJECT_DIR$/eureka-server" />
+            <option value="$PROJECT_DIR$/member-service" />
+            <option value="$PROJECT_DIR$/module-common" />
+            <option value="$PROJECT_DIR$/module-common/common-core" />
+            <option value="$PROJECT_DIR$/module-common/common-jpa" />
+            <option value="$PROJECT_DIR$/module-common/common-security" />
+            <option value="$PROJECT_DIR$/order-service" />
+            <option value="$PROJECT_DIR$/product-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

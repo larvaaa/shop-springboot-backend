@@ -1,0 +1,7 @@
+server:
+  port: 8761 # Eureka 서버 공식 포트 (관례적으로 8761 사용)
+
+eureka:
+  client:
+    register-with-eureka: false # 서버니까 자신을 등록하지 않음
+    fetch-registry: false       # 서버니까 목록을 가져올 필요 없음
