@@ -1,4 +1,4 @@
-package com.shopping.member.entity
+package com.shopping.batch.domain.member.entity
 
 import jakarta.persistence.*
 import org.springframework.security.core.GrantedAuthority
@@ -11,10 +11,12 @@ class Role (
     @Column(name = "role_id")
     var id: Long? = null,
 
-    val roleName: String
+    @Column(name = "role_name")
+    @get:JvmName("getAuthorityProperty")  // getter의 JVM 이름을 getAuthorityProperty로 변경
+    val authority: String
 
 ) : GrantedAuthority {
 
-    override fun getAuthority(): String = roleName
+    override fun getAuthority(): String = authority
 
 }
