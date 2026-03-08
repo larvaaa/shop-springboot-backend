@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: admin-service
+  profiles:
+    active: loc
+  config:
+    import:
+      - "classpath:application-core.yml"
+      - "classpath:application-jpa.yml"
 
   kafka:
     bootstrap-servers: 13.125.251.87:9092   # 카프카 주소
@@ -16,11 +22,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-  datasource:
-    url: jdbc:mysql://3.35.52.90:3306/admin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-    username: admin_user
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
 #    p6spy:
 #      enable-logging: true
 #      multiline: true
@@ -28,25 +29,11 @@ spring:
 #      tracing:
 #        include-parameter-values: true
 
-  jpa:
-    hibernate:
-      ddl-auto: none # ???? ?????? ???? ???? (none, update, create, create-drop)
-    properties:
-      hibernate:
-#        show-sql: true # SQL ?? ??
-        format_sql: true
-        default_batch_fetch_size: 100
-
 logging:
   level:
     org.hibernate.SQL: debug
     org.springframework:
       security: TRACE
-
-jwt:
-  secret-key: abcdefghijklmnopqrstuvwxyzabcdef
-  access-token-expiration-time: 1_800_000
-  refresh-token-expiration-time: 1_209_600_000
 
 eureka:
   client:

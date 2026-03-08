@@ -1,33 +1,4 @@
-server:
-  port: 8081
-
 spring:
-  application:
-    name: admin-service
-
-  kafka:
-    bootstrap-servers: 13.125.251.87:9092   # 카프카 주소
-    consumer:
-      group-id: test-group                # 컨슈머 그룹
-      auto-offset-reset: earliest       # 처음부터 읽기
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
-  datasource:
-    url: jdbc:mysql://54.180.153.138:3306/admin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-    username: admin_user
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    p6spy:
-#      enable-logging: true
-#      multiline: true
-#      logging: slf4j
-#      tracing:
-#        include-parameter-values: true
-
   jpa:
     hibernate:
       ddl-auto: none # ???? ?????? ???? ???? (none, update, create, create-drop)
@@ -36,25 +7,3 @@ spring:
 #        show-sql: true # SQL ?? ??
         format_sql: true
         default_batch_fetch_size: 100
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.springframework:
-      security: TRACE
-
-jwt:
-  secret-key: abcdefghijklmnopqrstuvwxyzabcdef
-  access-token-expiration-time: 1_800_000
-  refresh-token-expiration-time: 1_209_600_000
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-
-
-
