@@ -1,6 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://13.125.17.235:3306/member?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://3.39.231.239:3306/member?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: member_user
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+cookie:
+  domain: localhost
+  secure: true
+  same-site: None

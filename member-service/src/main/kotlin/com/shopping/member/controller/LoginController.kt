@@ -12,6 +12,7 @@ import com.shopping.member.service.MemberService
 import io.jsonwebtoken.Claims
 import jakarta.servlet.http.HttpServletResponse
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
@@ -30,7 +31,10 @@ class LoginController (
     val memberService: MemberService,
     val authorityService: AuthorityService,
     val passwordEncoder: PasswordEncoder,
-    val jwtUtil: JwtUtil
+    val jwtUtil: JwtUtil,
+    @Value("\${cookie.domain}") val COOKIE_DOMAIN: String,
+    @Value("\${cookie.secure}") val COOKIE_SECURE: Boolean,
+    @Value("\${cookie.same-site}") val COOKIE_SAME_SITE: String
 ) {
 
     private val log = KotlinLogging.logger {}
@@ -63,22 +67,22 @@ class LoginController (
             val accessToken: String = jwtUtil.generateAccessToken(memberId, convertedRoles)
             log.info("accessToken = {}", accessToken)
             val accessCookie: ResponseCookie = ResponseCookie.from("accessToken", accessToken)
-                .domain("localhost")
+                .domain(COOKIE_DOMAIN)
                 .path("/")
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(COOKIE_SECURE)
+                .sameSite(COOKIE_SAME_SITE)
                 .build()
 
             val refreshToken: String = jwtUtil.generateRefreshToken(memberId)
     //        val encodeToken: String = Base64.getUrlEncoder().encodeToString(refreshToken.toByteArray())
 
             val refreshCookie: ResponseCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .domain("localhost")
+                .domain(COOKIE_DOMAIN)
                 .path("/")
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(COOKIE_SECURE)
+                .sameSite(COOKIE_SAME_SITE)
                 .build()
 
             response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString())
@@ -179,11 +183,11 @@ class LoginController (
         val accessToken: String = jwtUtil.generateAccessToken(memberId.toString(), roles)
         log.info("accessToken = {}", accessToken)
         val accessCookie: ResponseCookie = ResponseCookie.from("accessToken", accessToken)
-            .domain("localhost")
+            .domain(COOKIE_DOMAIN)
             .path("/")
             .httpOnly(true)
-            .secure(true)
-            .sameSite("None")
+            .secure(COOKIE_SECURE)
+            .sameSite(COOKIE_SAME_SITE)
             .build()
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString())
 

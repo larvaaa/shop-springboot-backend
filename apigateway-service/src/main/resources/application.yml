@@ -14,15 +14,15 @@ spring:
         - id: member-service
           uri: lb://MEMBER-SERVICE
           predicates:
-            - Path=/member-service/**
+            - Path=/api/member-service/**
           filters:
-            - RewritePath=/member-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/member-service/(?<segment>.*), /$\{segment}
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
-            - Path=/admin-service/**
+            - Path=/api/admin-service/**
           filters:
-            - RewritePath=/admin-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/api/admin-service/(?<segment>.*), /$\{segment}
 
   security:
     oauth2:
