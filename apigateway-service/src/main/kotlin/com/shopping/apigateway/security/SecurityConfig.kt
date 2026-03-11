@@ -31,12 +31,12 @@ class SecurityConfig(
                 exchanges.pathMatchers(HttpMethod.OPTIONS).permitAll()
                 exchanges
                     .pathMatchers(
-                        "/member-service/users",
-                        "/member-service/login",
-                        "/member-service/error",
-                        "/member-service/duplicateCheck",
-                        "/member-service/accessToken",
-                        "/member-service/test/**"
+                        "/api/member-service/users",
+                        "/api/member-service/login",
+                        "/api/member-service/error",
+                        "/api/member-service/duplicateCheck",
+                        "/api/member-service/accessToken",
+                        "/api/member-service/test/**"
                     ).permitAll() // 인증 없이 접근 허용
                     .anyExchange().authenticated() // 그 외 모든 요청 인증 필요
             }
