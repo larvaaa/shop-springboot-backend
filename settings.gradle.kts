@@ -4,7 +4,7 @@ plugins {
 rootProject.name = "shopping"
 
 include("member-service")
-include("product-service")
+include("store-service")
 include("order-service")
 include("delivery-service")
 include("admin-service")
