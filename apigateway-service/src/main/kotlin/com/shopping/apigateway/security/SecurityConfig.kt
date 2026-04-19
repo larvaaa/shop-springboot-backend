@@ -50,7 +50,7 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
-            addAllowedOrigin("http://localhost:3000")
+            addAllowedOrigin("http://loc.fooddelivery.com:3000")
             addAllowedMethod("*")
             addAllowedHeader("*")
             allowCredentials = true
