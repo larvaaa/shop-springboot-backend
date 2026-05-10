@@ -23,6 +23,12 @@ spring:
             - Path=/api/admin-service/**
           filters:
             - RewritePath=/api/admin-service/(?<segment>.*), /$\{segment}
+        - id: store-service
+          uri: lb://STORE-SERVICE
+          predicates:
+            - Path=/api/store-service/**
+          filters:
+            - RewritePath=/api/store-service/(?<segment>.*), /$\{segment}
 
   security:
     oauth2:

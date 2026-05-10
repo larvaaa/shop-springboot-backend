@@ -24,7 +24,7 @@ class Menu (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    val parent: Menu?,
+    val parent: Menu? = null,
 
     var useYn: Char = 'Y',
 
