@@ -22,6 +22,7 @@ class StoreController(
         TODO()
     }
 
+    // 가게등록
     @PostMapping
     fun registerStore(@RequestBody dto: StoreRegisterRequest): ResponseEntity<Any> {
         storeService.registerStore(dto)
