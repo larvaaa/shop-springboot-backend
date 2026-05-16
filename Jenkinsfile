@@ -17,10 +17,10 @@ pipeline {
         // ==========================================
         stage('Eureka Server') {
             // eureka-server 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "eureka-server/**" }
+            when { changeset "eureka-server/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "📦 Eureka Server 변경 감지! 빌드를 시작합니다."
+                echo "Eureka Server 빌드"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -41,10 +41,10 @@ pipeline {
         // ==========================================
         stage('Apigateway Service') {
             // apigateway-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "apigateway-service/**" }
+            when { changeset "apigateway-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "📦 Apigateway Service 변경 감지! 빌드를 시작합니다."
+                echo "Apigateway Service 빌드"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -64,10 +64,10 @@ pipeline {
         // ==========================================
         stage('Admin Service') {
             // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "admin-service/**" }
+            when { changeset "admin-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "📦 Admin Service 변경 감지! 빌드를 시작합니다."
+                echo "Admin Service 빌드"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -77,7 +77,7 @@ pipeline {
                 sh '''
                     PID=$(lsof -t -i:8081 || true)
                     if [ -n "$PID" ]; then kill -9 $PID; sleep 3; fi
-                    nohup java -jar admin-service/build/libs/*SNAPSHOT.jar > admin.log 2>&1 &
+                    nohup java -jar -Dspring.profiles.active=dev admin-service/build/libs/*SNAPSHOT.jar > admin.log 2>&1 &
                 '''
             }
         }
@@ -87,10 +87,10 @@ pipeline {
         // ==========================================
         stage('Member Service') {
             // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "member-service/**" }
+            when { changeset "member-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "🛵 Member Service 변경 감지! 빌드를 시작합니다."
+                echo "Member Service 빌드"
 
                 sh 'chmod +x gradlew'
                 sh './gradlew :member-service:clean :member-service:build -x test --no-daemon -Dorg.gradle.jvmargs="-Xmx256m"'
@@ -98,7 +98,7 @@ pipeline {
                 sh '''
                     PID=$(lsof -t -i:8082 || true)
                     if [ -n "$PID" ]; then kill -9 $PID; sleep 3; fi
-                    nohup java -jar member-service/build/libs/*SNAPSHOT.jar > member.log 2>&1 &
+                    nohup java -jar -Dspring.profiles.active=dev member-service/build/libs/*SNAPSHOT.jar > member.log 2>&1 &
                 '''
             }
         }
@@ -108,10 +108,10 @@ pipeline {
         // ==========================================
         stage('Store Service') {
             // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            // when { changeset "store-service/**" }
+            when { changeset "store-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "🛵 Store Service 변경 감지! 빌드를 시작합니다."
+                echo "Store Service 빌드"
 
                 sh 'chmod +x gradlew'
                 sh './gradlew :store-service:clean :store-service:build -x test --no-daemon -Dorg.gradle.jvmargs="-Xmx256m"'
@@ -119,7 +119,7 @@ pipeline {
                 sh '''
                     PID=$(lsof -t -i:8083 || true)
                     if [ -n "$PID" ]; then kill -9 $PID; sleep 3; fi
-                    nohup java -jar store-service/build/libs/*SNAPSHOT.jar > store.log 2>&1 &
+                    nohup java -jar -Dspring.profiles.active=dev store-service/build/libs/*SNAPSHOT.jar > store.log 2>&1 &
                 '''
             }
         }
