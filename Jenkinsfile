@@ -15,6 +15,30 @@ pipeline {
         stage('2. MSA Services Build & Deploy') {
             parallel {
                 // ==========================================
+                // [eureka 서버] 파이프라인
+                // ==========================================
+                stage('Eureka Server') {
+                    // eureka-server 폴더 하위의 코드가 변경되었을 때만 실행!
+                    when { changeset "eureka-server/**" }
+                    steps {
+                        script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
+                        echo "📦 Eureka Server 변경 감지! 빌드를 시작합니다."
+
+                        // Gradle 멀티 모듈 특정 서비스만 빌드
+                        sh 'chmod +x gradlew'
+                        sh './gradlew :eureka-server:clean :eureka-server:build -x test'
+
+                        // 기존 주문 서비스 포트(8761) 종료 및 새 Jar 실행
+                        sh '''
+                            PID=$(lsof -t -i:8761 || true)
+                            if [ -n "$PID" ]; then kill -9 $PID; sleep 3; fi
+                            nohup java -jar eureka-server/build/libs/*SNAPSHOT.jar > eureka.log 2>&1 &
+                        '''
+                    }
+                }
+
+
+                // ==========================================
                 // [게이트웨이 서비스] 파이프라인
                 // ==========================================
                 stage('Apigateway Service') {
