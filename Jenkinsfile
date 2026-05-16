@@ -64,7 +64,7 @@ pipeline {
         // ==========================================
         stage('Admin Service') {
             // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "admin-service/**" }
+//             when { changeset "admin-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "Admin Service 빌드"
@@ -87,7 +87,7 @@ pipeline {
         // ==========================================
         stage('Member Service') {
             // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "member-service/**" }
+//             when { changeset "member-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "Member Service 빌드"
@@ -108,7 +108,7 @@ pipeline {
         // ==========================================
         stage('Store Service') {
             // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "store-service/**" }
+//             when { changeset "store-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "Store Service 빌드"
