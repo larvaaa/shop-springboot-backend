@@ -19,7 +19,7 @@ pipeline {
                 // ==========================================
                 stage('Eureka Server') {
                     // eureka-server 폴더 하위의 코드가 변경되었을 때만 실행!
-                    when { changeset "eureka-server/**" }
+//                     when { changeset "eureka-server/**" }
                     steps {
                         script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                         echo "📦 Eureka Server 변경 감지! 빌드를 시작합니다."
@@ -43,7 +43,7 @@ pipeline {
                 // ==========================================
                 stage('Apigateway Service') {
                     // apigateway-service 폴더 하위의 코드가 변경되었을 때만 실행!
-                    when { changeset "apigateway-service/**" }
+//                     when { changeset "apigateway-service/**" }
                     steps {
                         script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                         echo "📦 Apigateway Service 변경 감지! 빌드를 시작합니다."
@@ -66,7 +66,7 @@ pipeline {
                 // ==========================================
                 stage('Admin Service') {
                     // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
-                    when { changeset "admin-service/**" }
+//                     when { changeset "admin-service/**" }
                     steps {
                         script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                         echo "📦 Admin Service 변경 감지! 빌드를 시작합니다."
@@ -89,7 +89,7 @@ pipeline {
                 // ==========================================
                 stage('Member Service') {
                     // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
-                    when { changeset "member-service/**" }
+//                     when { changeset "member-service/**" }
                     steps {
                         script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                         echo "🛵 Member Service 변경 감지! 빌드를 시작합니다."
@@ -110,7 +110,7 @@ pipeline {
                 // ==========================================
                 stage('Store Service') {
                     // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
-                    when { changeset "store-service/**" }
+//                     when { changeset "store-service/**" }
                     steps {
                         script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                         echo "🛵 Store Service 변경 감지! 빌드를 시작합니다."
