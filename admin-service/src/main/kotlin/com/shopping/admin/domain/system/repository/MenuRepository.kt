@@ -1,5 +1,6 @@
 package com.shopping.admin.domain.system.repository
 
+import com.shopping.admin.domain.system.dto.MenuProjection
 import com.shopping.admin.domain.system.entity.Menu
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -12,12 +13,14 @@ interface MenuRepository : JpaRepository<Menu, Long>, MenuRepositoryCustom {
         with recursive menu_hierarchy as (
             select m.menu_id
                  , m.menu_name
+                 , p.menu_name as parent_menu_name
                  , m.screen_id
                  , m.level
                  , m.sort
                  , m.parent_id
                  , m.use_yn
                  , s.screen_name
+                 , s.path as screen_path
                  , m.created_by
                  , m.created_date
                  , m.last_modified_by
@@ -32,12 +35,14 @@ interface MenuRepository : JpaRepository<Menu, Long>, MenuRepositoryCustom {
             union all
             select m.menu_id
                  , m.menu_name
+                 , p.menu_name as parent_menu_name
                  , m.screen_id
                  , m.level
                  , m.sort
                  , m.parent_id
                  , m.use_yn
                  , s.screen_name
+                 , s.path as screen_path
                  , m.created_by
                  , m.created_date
                  , m.last_modified_by
@@ -53,12 +58,14 @@ interface MenuRepository : JpaRepository<Menu, Long>, MenuRepositoryCustom {
         )
         select menu_id
              , menu_name
+             , parent_menu_name
              , level
              , sort
              , use_yn
              , parent_id
              , screen_id
              , screen_name
+             , screen_path
              , created_by
              , created_date
              , last_modified_by
@@ -66,7 +73,8 @@ interface MenuRepository : JpaRepository<Menu, Long>, MenuRepositoryCustom {
           from menu_hierarchy
          order by order_path
     """, nativeQuery = true)
-    fun findHierarchyMenu(): List<Menu>
+    // JPA 네이티브 쿼리는 일반 클래스로 직접 매핑 불가 — 프로젝션 인터페이스만 지원
+    fun findHierarchyMenu(): List<MenuProjection>
 
     override fun delete(menu: Menu)
 }

@@ -25,7 +25,14 @@ class StoreController(
     // 가게등록
     @PostMapping
     fun registerStore(@RequestBody dto: StoreRegisterRequest): ResponseEntity<Any> {
-        storeService.registerStore(dto)
+
+        try {
+            storeService.registerStore(dto)
+
+        } catch (e: IllegalStateException) {
+            return ResponseEntity.ok(ApiResponse.error("fail", e.message ?: "문제가 발생했습니다. \n 잠시후 다시 시도해주세요"))
+        }
+
 
         return ResponseEntity.ok(ApiResponse.success())
     }

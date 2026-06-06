@@ -22,7 +22,7 @@ class MenuController (
     @GetMapping("/menu")
     fun selectMenu(): ResponseEntity<List<MenuDto>> {
 
-        return ResponseEntity.ok(menuService.findAll())
+        return ResponseEntity.ok(menuService.findHierarchyMenu())
     }
 
     @DeleteMapping("/menu")

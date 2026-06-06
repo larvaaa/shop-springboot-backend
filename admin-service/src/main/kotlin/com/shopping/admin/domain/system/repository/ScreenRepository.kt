@@ -49,10 +49,12 @@ class ScreenRepositoryCustomImpl(
             .fetch()
     }
 
+    // 동적쿼리
     private fun nameLike(name: String?): BooleanExpression? {
         return if (name.isNullOrBlank()) null else screen.name.like("%${name}%")
     }
 
+    // 동적쿼리
     private fun useYnEq(useYn: String?): BooleanExpression? {
         return if (useYn.isNullOrBlank()) null else screen.useYn.eq(useYn)
     }
