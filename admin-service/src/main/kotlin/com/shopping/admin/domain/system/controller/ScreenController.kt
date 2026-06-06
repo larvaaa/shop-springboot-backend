@@ -24,7 +24,7 @@ class ScreenController(
     }
 
     @GetMapping("/screen")
-    fun selectScreen(dto: ScreenDto): ResponseEntity<List<ScreenDto>> {
+    fun selectScreen(@ModelAttribute dto: ScreenDto): ResponseEntity<List<ScreenDto>> {
         val screenList = screenService.getScreen(dto)
         return ResponseEntity.ok(screenList)
     }

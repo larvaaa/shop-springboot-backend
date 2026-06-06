@@ -14,6 +14,9 @@ class Brand (
     @Column(name = "brand_name")
     var name: String,
 
+    @Column(name = "description")
+    var description: String?,
+
     @Column(name = "attach_file_id")
     var attachFileId: Long? = null,
 

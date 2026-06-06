@@ -20,7 +20,9 @@ pipeline {
             when { changeset "eureka-server/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "Eureka Server 빌드"
+                echo "======================================"
+                echo "[ Eureka Server 빌드 ]"
+                echo "======================================"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -44,7 +46,9 @@ pipeline {
             when { changeset "apigateway-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "Apigateway Service 빌드"
+                echo "======================================"
+                echo "[ Apigateway Service 빌드 ]"
+                echo "======================================"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -64,10 +68,12 @@ pipeline {
         // ==========================================
         stage('Admin Service') {
             // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "admin-service/**" }
+            when { changeset "admin-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "Admin Service 빌드"
+                echo "======================================"
+                echo "[ Admin Service 빌드 ]"
+                echo "======================================"
 
                 // Gradle 멀티 모듈 특정 서비스만 빌드
                 sh 'chmod +x gradlew'
@@ -87,10 +93,12 @@ pipeline {
         // ==========================================
         stage('Member Service') {
             // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "member-service/**" }
+            when { changeset "member-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "Member Service 빌드"
+                echo "======================================"
+                echo "[ Member Service 빌드 ]"
+                echo "======================================"
 
                 sh 'chmod +x gradlew'
                 sh './gradlew :member-service:clean :member-service:build -x test --no-daemon -Dorg.gradle.jvmargs="-Xmx256m"'
@@ -108,10 +116,12 @@ pipeline {
         // ==========================================
         stage('Store Service') {
             // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
-//             when { changeset "store-service/**" }
+            when { changeset "store-service/**" }
             steps {
                 script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
-                echo "Store Service 빌드"
+                echo "======================================"
+                echo "[ Store Service 빌드 ]"
+                echo "======================================"
 
                 sh 'chmod +x gradlew'
                 sh './gradlew :store-service:clean :store-service:build -x test --no-daemon -Dorg.gradle.jvmargs="-Xmx256m"'

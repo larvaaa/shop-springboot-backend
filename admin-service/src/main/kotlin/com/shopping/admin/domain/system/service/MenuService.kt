@@ -47,26 +47,25 @@ class MenuService (
         }
     }
 
-    fun findAll(): List<MenuDto> {
-
-        val findMenus: List<Menu> = menuRepository.findHierarchyMenu()
-
-        val findMenuDtos = findMenus.map {
+    fun findHierarchyMenu(): List<MenuDto> {
+        return menuRepository.findHierarchyMenu().map {
             MenuDto(
-                menuId = it.id,
-                menuName = it.name,
-                level = it.level,
-                sort = it.sort,
-                useYn = it.useYn,
-                parentId = it.parent?.id,
-                screenId = it.screen?.id,
-                screenName = it.screen?.name,
-                screenPath = it.screen?.path
+                menuId = it.getMenuId(),
+                menuName = it.getMenuName(),
+                parentMenuName = it.getParentMenuName() ?: "",
+                level = it.getLevel(),
+                sort = it.getSort(),
+                useYn = it.getUseYn().first(),
+                parentId = it.getParentId(),
+                screenId = it.getScreenId(),
+                screenName = it.getScreenName(),
+                screenPath = it.getScreenPath(),
+                createdBy = it.getCreatedBy(),
+                createdDate = it.getCreatedDate(),
+                lastModifiedBy = it.getLastModifiedBy(),
+                lastModifiedDate = it.getLastModifiedDate(),
             )
         }
-
-        return findMenuDtos
-
     }
 
     fun deleteMenu(dto: MenuDto) {

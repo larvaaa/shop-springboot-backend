@@ -2,7 +2,8 @@ package com.shopping.store.dto
 
 data class StoreRegisterRequest(
     val name: String,
-    val brand: List<Long>?,
+    val brandId: Long?,
+    val categoryIds: List<Long>,
     val postalCode: String,
     val address: String,
     val detailAddress: String,

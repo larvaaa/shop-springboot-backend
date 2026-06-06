@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface CategoryRepository : JpaRepository<Category, Long>, CategoryRepositoryCustom {
 
     fun findAllByOrderBySortOrder(): List<Category>
+
+    fun findEntityById(id: Long): Category?
 }
 
 interface CategoryRepositoryCustom {
