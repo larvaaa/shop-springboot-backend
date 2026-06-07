@@ -4,6 +4,10 @@ pipeline {
         jdk 'JDK-17'
     }
 
+    environment {
+        JENKINS_NODE_COOKIE = 'dontKillMe'
+    }
+
     stages {
         stage('1. Checkout') {
             steps {
@@ -19,7 +23,6 @@ pipeline {
             // eureka-server 폴더 하위의 코드가 변경되었을 때만 실행!
             when { changeset "eureka-server/**" }
             steps {
-                script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "======================================"
                 echo "[ Eureka Server 빌드 ]"
                 echo "======================================"
@@ -45,7 +48,6 @@ pipeline {
             // apigateway-service 폴더 하위의 코드가 변경되었을 때만 실행!
             when { changeset "apigateway-service/**" }
             steps {
-                script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "======================================"
                 echo "[ Apigateway Service 빌드 ]"
                 echo "======================================"
@@ -70,7 +72,6 @@ pipeline {
             // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
             when { changeset "admin-service/**" }
             steps {
-                script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "======================================"
                 echo "[ Admin Service 빌드 ]"
                 echo "======================================"
@@ -95,7 +96,6 @@ pipeline {
             // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
             when { changeset "member-service/**" }
             steps {
-                script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "======================================"
                 echo "[ Member Service 빌드 ]"
                 echo "======================================"
@@ -118,7 +118,6 @@ pipeline {
             // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
             when { changeset "store-service/**" }
             steps {
-                script { env.JENKINS_NODE_COOKIE = 'dontKillMe' }
                 echo "======================================"
                 echo "[ Store Service 빌드 ]"
                 echo "======================================"
