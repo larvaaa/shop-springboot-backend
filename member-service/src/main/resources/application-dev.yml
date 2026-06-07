@@ -8,4 +8,4 @@ spring:
 cookie:
   domain: dev.fooddelivery.com
   secure: false
-  same-site: Lax
+  same-site: strict
