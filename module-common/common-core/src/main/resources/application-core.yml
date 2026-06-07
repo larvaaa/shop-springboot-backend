@@ -1,4 +1,5 @@
 jwt:
   secret-key: abcdefghijklmnopqrstuvwxyzabcdef
+#  access-token-expiration-time: 10_000
   access-token-expiration-time: 1_800_000
   refresh-token-expiration-time: 1_209_600_000

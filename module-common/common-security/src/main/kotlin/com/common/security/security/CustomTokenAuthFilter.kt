@@ -1,6 +1,7 @@
 package com.common.security.security
 
 import com.common.core.util.JwtUtil
+import com.common.core.util.TokenType
 import com.common.security.entity.Role
 import io.jsonwebtoken.Claims
 import jakarta.servlet.FilterChain
@@ -63,7 +64,7 @@ class CustomTokenAuthFilter(
         val accessToken: String = authorizationHeaderValue.substring(7)
         // log.info("accessToken = $accessToken")
 
-        jwtUtil.validateToken(accessToken)
+        jwtUtil.validateToken(TokenType.ACCESS, accessToken)
 
         val claim: Claims = jwtUtil.getClaimsFromToken(accessToken)
 
