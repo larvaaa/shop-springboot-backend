@@ -1,13 +1,13 @@
 package com.shopping.member.security
 
 import com.common.core.util.JwtUtil
+import com.common.core.util.TokenType
 import com.shopping.member.entity.Role
 import io.jsonwebtoken.Claims
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
@@ -64,7 +64,7 @@ class CustomTokenAuthFilter(
         val accessToken: String = authorizationHeaderValue.substring(7)
         // log.info("accessToken = $accessToken")
 
-        jwtUtil.validateToken(accessToken)
+        jwtUtil.validateToken(TokenType.ACCESS, accessToken)
 
         val claim: Claims = jwtUtil.getClaimsFromToken(accessToken)
 

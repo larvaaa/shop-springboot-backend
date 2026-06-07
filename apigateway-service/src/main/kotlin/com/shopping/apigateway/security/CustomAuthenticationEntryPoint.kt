@@ -30,23 +30,24 @@ class CustomAuthenticationEntryPoint(
         response.headers.contentType = MediaType.APPLICATION_JSON
 
         // 예외 타입에 따라 분기 처리
-        val (errorCode, errorMessage) = when (ex) {
+        val errorResponse = when (ex) {
             // ★ 여기서 커스텀 예외를 잡아서 처리
             is JwtAuthenticationException -> {
-                // ex.errorType에 접근 가능
-                ex.errorType to ex.message
+                mapOf(
+                    "tokenType" to ex.tokenType,
+                    "errorType" to ex.errorType,
+                    "message" to ex.message,
+                )
             }
             // 그 외 일반적인 인증 예외 처리
-            else -> "AUTH_FAIL" to "인증에 실패했습니다."
+            else -> mapOf(
+                "tokenType" to null,
+                "errorType" to null,
+                "message" to "인증에 실패 하였습니다.",
+            )
         }
 
-        log.info("인증실패 코드: $errorCode, 메시지: $errorMessage")
-
-        // 2. 실패 사유 객체 생성 (원하는 포맷으로 커스텀)
-        val errorResponse = mapOf(
-            "code" to errorCode,
-            "message" to errorMessage,
-        )
+        log.info("토큰타입: ${errorResponse["tokenType"]}, 실패타입: ${errorResponse["errorType"]}, 메시지: ${errorResponse["message"]}")
 
         // 3. JSON 변환 및 응답 쓰기
         val bytes = objectMapper.writeValueAsBytes(errorResponse)

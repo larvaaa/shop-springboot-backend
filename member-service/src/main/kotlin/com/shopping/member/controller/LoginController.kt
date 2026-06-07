@@ -1,5 +1,6 @@
 package com.shopping.member.controller
 
+import com.common.core.dto.AuthenticationResult
 import com.common.core.util.JwtResult
 import com.common.core.util.JwtUtil
 import com.common.core.util.TokenType
@@ -97,16 +98,22 @@ class LoginController (
     @GetMapping("/login")
     fun login(
         @CookieValue("accessToken", required = false) accessToken: String?,
-    ): ResponseEntity<LoginResponse> {
+    ): ResponseEntity<Any> {
 
         // if (accessToken == null || accessToken == "") throw NullPointerException("accessToken is missing")
 
-        val jwtResult = jwtUtil.validateToken(accessToken)
+        val jwtResult = jwtUtil.validateToken(TokenType.ACCESS, accessToken)
 
         if(jwtResult is JwtResult.Failure) {
             return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(LoginResponse(failCode = jwtResult.errorType.name))
+                .body(
+                    mapOf(
+                        "tokenType" to jwtResult.tokenType,
+                        "errorType" to jwtResult.errorType,
+                        "message" to jwtResult.message,
+                    )
+                )
         }
 
         val claim: Claims = jwtUtil.getClaimsFromToken(accessToken)
@@ -151,19 +158,23 @@ class LoginController (
     fun refreshAccessToken(
         @CookieValue refreshToken: String?,
         response: HttpServletResponse
-    ): ResponseEntity<LoginResponse?> {
+    ): ResponseEntity<Any> {
 
         var status = HttpStatus.OK
         var message = ""
 
 
-        val jwtResult = jwtUtil.validateToken(refreshToken)
+        val jwtResult = jwtUtil.validateToken(TokenType.REFRESH, refreshToken)
         if(jwtResult is JwtResult.Failure) {
             return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(LoginResponse(
-                    failCode = jwtResult.errorType.name,
-                    tokenType = TokenType.REFRESH.name))
+                .body(
+                    mapOf(
+                        "tokenType" to jwtResult.tokenType,
+                        "errorType" to jwtResult.errorType,
+                        "message" to jwtResult.message,
+                    )
+                )
         }
 
         val claim: Claims = jwtUtil.getClaimsFromToken(refreshToken)
@@ -227,12 +238,11 @@ class LoginController (
     )
 
     data class LoginResponse(
-        val tokenType: String = TokenType.ACCESS.name,
-        val failCode: String? = null,
         val accessToken: String? = null,
         val memberId: Long? = null,
         val memberName: String? = null,
-        val isLogin: Boolean? = null
+        val isLogin: Boolean? = null,
+        val authenticationResult: AuthenticationResult? = null,
     )
 
 }

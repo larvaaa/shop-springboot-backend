@@ -50,7 +50,7 @@ class JwtUtil {
     }
 
     // 단순히 true/false를 리턴하는게 아니라 정확한 실패이유를 전달
-    fun validateToken(token: String?): JwtResult {
+    fun validateToken(tokenType: TokenType, token: String?): JwtResult {
         val key = SecretKeySpec(SECRET_KEY.toByteArray(), SignatureAlgorithm.HS256.jcaName)
 
         return try {
@@ -62,22 +62,22 @@ class JwtUtil {
             JwtResult.Success
         } catch (e: SignatureException) {
             log.error("Invalid JWT signature: ${e.message}")
-            JwtResult.Failure(JwtErrorType.INVALID_SIGNATURE, "Invalid JWT signature")
+            JwtResult.Failure(tokenType, JwtErrorType.INVALID_SIGNATURE, "Invalid JWT signature")
         } catch (e: MalformedJwtException) {
             log.error("Invalid JWT token format: ${e.message}")
-            JwtResult.Failure(JwtErrorType.MALFORMED, "Invalid JWT token format")
+            JwtResult.Failure(tokenType, JwtErrorType.MALFORMED, "Invalid JWT token format")
         } catch (e: ExpiredJwtException) {
             log.error("JWT token is expired: ${e.message}")
-            JwtResult.Failure(JwtErrorType.EXPIRED, "JWT token is expired")
+            JwtResult.Failure(tokenType, JwtErrorType.EXPIRED, "JWT token is expired")
         } catch (e: UnsupportedJwtException) {
             log.error("Unsupported JWT token: ${e.message}")
-            JwtResult.Failure(JwtErrorType.UNSUPPORTED, "Unsupported JWT token")
+            JwtResult.Failure(tokenType, JwtErrorType.UNSUPPORTED, "Unsupported JWT token")
         } catch (e: IllegalArgumentException) {
             log.error("JWT claims string is empty or invalid: ${e.message}")
-            JwtResult.Failure(JwtErrorType.EMPTY, "JWT claims string is empty or invalid")
+            JwtResult.Failure(tokenType, JwtErrorType.EMPTY, "JWT claims string is empty or invalid")
         } catch (e: Exception) {
             log.error("Unexpected error during JWT validation: ${e.message}")
-            JwtResult.Failure(JwtErrorType.UNKNOWN, "Unexpected error during JWT validation")
+            JwtResult.Failure(tokenType, JwtErrorType.UNKNOWN, "Unexpected error during JWT validation")
         }
     }
 
@@ -92,10 +92,10 @@ class JwtUtil {
 
     // 시큐리티 필터에서 사용, 실패시 예외를 던져서 AuthenticationEntryPoint에서 처리
     @Throws(JwtAuthenticationException::class)
-    fun validateTokenOrThrow(token: String) {
-        val result = validateToken(token)
+    fun validateTokenOrThrow(tokenType: TokenType, token: String) {
+        val result = validateToken(tokenType, token)
         if (result is JwtResult.Failure) {
-            throw JwtAuthenticationException(result.errorType, result.message)
+            throw JwtAuthenticationException(result.tokenType ,result.errorType, result.message)
         }
     }
 

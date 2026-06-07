@@ -1,9 +1,11 @@
 package com.shopping.apigateway.security
 
+import com.shopping.apigateway.filter.JwtAuthenticationWebFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.cors.CorsConfiguration
@@ -15,7 +17,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 class SecurityConfig(
     private val authenticationManager: AuthenticationManager,
     private val securityContextRepository: SecurityContextRepository,
-    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint
+    private val jwtAuthenticationWebFilter: JwtAuthenticationWebFilter,
 ) {
 
     @Bean
@@ -27,6 +29,7 @@ class SecurityConfig(
             .httpBasic { it.disable() } // Http Basic 인증 비활성화
             .authenticationManager(authenticationManager)
             .securityContextRepository(securityContextRepository)
+            .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .authorizeExchange { exchanges ->
                 exchanges.pathMatchers(HttpMethod.OPTIONS).permitAll()
                 exchanges
@@ -39,10 +42,6 @@ class SecurityConfig(
                         "/api/member-service/test/**"
                     ).permitAll() // 인증 없이 접근 허용
                     .anyExchange().authenticated() // 그 외 모든 요청 인증 필요
-            }
-            .exceptionHandling { handling ->
-                // 인증 실패 시 401 에러 처리 (선택사항)
-                handling.authenticationEntryPoint(customAuthenticationEntryPoint)
             }
             .build()
     }
