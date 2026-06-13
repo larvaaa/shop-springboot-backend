@@ -37,7 +37,11 @@ logging:
       security: INFO
 
 eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
   client:
+    registry-fetch-interval-seconds: 5
     register-with-eureka: true
     fetch-registry: true
     service-url:

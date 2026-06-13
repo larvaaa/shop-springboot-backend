@@ -5,3 +5,6 @@ eureka:
   client:
     register-with-eureka: false # 서버니까 자신을 등록하지 않음
     fetch-registry: false       # 서버니까 목록을 가져올 필요 없음
+  server:
+    response-cache-update-interval-ms: 3000      # 서버 캐시 갱신 주기 (기본 30초)
+    eviction-interval-timer-in-ms: 3000          # 서비스 만료 체크 주기
