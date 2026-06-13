@@ -8,6 +8,11 @@ pipeline {
         JENKINS_NODE_COOKIE = 'dontKillMe'
     }
 
+    parameters {
+        // Jenkins 빌드 시 체크박스로 선택 가능
+        booleanParam(name: 'DEPLOY_ALL', defaultValue: false, description: '전체 서비스 배포')
+    }
+
     stages {
         stage('1. Checkout') {
             steps {
@@ -21,7 +26,12 @@ pipeline {
         // ==========================================
         stage('Eureka Server') {
             // eureka-server 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "eureka-server/**" }
+            when {
+                anyOf {
+                    expression { params.DEPLOY_ALL == true }
+                    changeset "eureka-server/**"
+                }
+            }
             steps {
                 echo "======================================"
                 echo "[ Eureka Server 빌드 ]"
@@ -46,7 +56,12 @@ pipeline {
         // ==========================================
         stage('Apigateway Service') {
             // apigateway-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "apigateway-service/**" }
+            when {
+                anyOf {
+                    expression { params.DEPLOY_ALL == true }
+                    changeset "apigateway-service/**"
+                }
+            }
             steps {
                 echo "======================================"
                 echo "[ Apigateway Service 빌드 ]"
@@ -70,7 +85,12 @@ pipeline {
         // ==========================================
         stage('Admin Service') {
             // admin-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "admin-service/**" }
+            when {
+                anyOf {
+                    expression { params.DEPLOY_ALL == true }
+                    changeset "admin-service/**"
+                }
+            }
             steps {
                 echo "======================================"
                 echo "[ Admin Service 빌드 ]"
@@ -94,7 +114,12 @@ pipeline {
         // ==========================================
         stage('Member Service') {
             // member-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "member-service/**" }
+            when {
+                anyOf {
+                    expression { params.DEPLOY_ALL == true }
+                    changeset "member-service/**"
+                }
+            }
             steps {
                 echo "======================================"
                 echo "[ Member Service 빌드 ]"
@@ -116,7 +141,12 @@ pipeline {
         // ==========================================
         stage('Store Service') {
             // store-service 폴더 하위의 코드가 변경되었을 때만 실행!
-            when { changeset "store-service/**" }
+            when {
+                anyOf {
+                    expression { params.DEPLOY_ALL == true }
+                    changeset "store-service/**"
+                }
+            }
             steps {
                 echo "======================================"
                 echo "[ Store Service 빌드 ]"
