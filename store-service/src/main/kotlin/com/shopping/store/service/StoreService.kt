@@ -1,6 +1,6 @@
 package com.shopping.store.service
 
-import com.shopping.store.dto.StoreRegisterRequest
+import com.shopping.store.dto.*
 import com.shopping.store.entity.Store
 import com.shopping.store.entity.StoreCategoryMap
 import com.shopping.store.entity.StoreOperationHour
@@ -19,13 +19,50 @@ class StoreService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getStore(id: Long) {
-        TODO()
+    fun getStore(id: Long): StoreDetailResponse {
+        val storeEntity = storeRepository.findStoreById(id)
+        val categoryIds = storeCategoryMapRepository.findByStore(storeEntity).map { it.category.id!! }
+        return StoreDetailResponse(
+            id = storeEntity.id,
+            name = storeEntity.name,
+            brandId = storeEntity.brand?.id,
+            brandName = storeEntity.brand?.name,
+            postalCode = storeEntity.postalCode,
+            address = storeEntity.address,
+            detailAddress = storeEntity.detailAddress,
+            phone = storeEntity.phone,
+            minOrderPrice = storeEntity.minOrderPrice,
+            estimatedDeliveryTime = storeEntity.estimatedDeliveryTime,
+            businessStatus = storeEntity.businessStatus,
+            description = storeEntity.description,
+            isUse = storeEntity.isUse,
+            operationHours = storeEntity.storeOperationHour.map {
+                StoreOperationHourDto(
+                    id = it.id!!,
+                    store_id = storeEntity.id!!,
+                    dayOfWeek = it.dayOfWeek,
+                    openTime = it.openTime,
+                    closeTime = it.closeTime,
+                    breakStart = it.breakStart,
+                    breakEnd = it.breakEnd,
+                    isDayOff = it.isDayOff,
+                )
+            },
+            categoryIds = categoryIds,
+        )
     }
 
     @Transactional(readOnly = true)
-    fun getStores() {
-        TODO()
+    fun getStores(dto: StoreFindRequest): List<StoreFindResponse> {
+        val stores = storeRepository.findStores(dto)
+        if (stores.isEmpty()) return stores
+
+        val storeIds = stores.mapNotNull { it.id }
+        val categoryNamesByStoreId = storeCategoryMapRepository.findByStoreIdIn(storeIds)
+            .groupBy { it.store.id!! }
+            .mapValues { (_, maps) -> maps.joinToString(", ") { it.category.name } }
+
+        return stores.map { it.copy(categoryNames = categoryNamesByStoreId[it.id]) }
     }
 
     @Transactional
@@ -78,7 +115,47 @@ class StoreService(
 
     }
 
-    fun updateStore(id: Long) {
-        TODO()
+    @Transactional
+    fun updateStore(id: Long, dto: StoreRegisterRequest) {
+        val store = storeRepository.findStoreById(id)
+
+        val brand = dto.brandId?.let {
+            brandRepository.findEntityById(it) ?: throw IllegalStateException("존재하지 않는 brandId => ${dto.brandId}")
+        }
+
+        store.name = dto.name
+        store.brand = brand
+        store.postalCode = dto.postalCode
+        store.address = dto.address
+        store.detailAddress = dto.detailAddress
+        store.phone = dto.phone
+        store.minOrderPrice = dto.minOrderPrice
+        store.estimatedDeliveryTime = dto.estimatedDeliveryTime
+
+        storeOperationHourRepository.deleteByStore(store)
+        dto.storeOperationHour.forEach {
+            h -> storeOperationHourRepository.save(
+                StoreOperationHour(
+                    store = store,
+                    dayOfWeek = h.dayOfWeek,
+                    openTime = h.openTime,
+                    closeTime = h.closeTime,
+                    breakStart = h.breakStart,
+                    breakEnd = h.breakEnd,
+                    isDayOff = h.isDayOff,
+                )
+            )
+        }
+
+        storeCategoryMapRepository.deleteByStore(store)
+        dto.categoryIds.forEach {
+            val category = categoryRepository.findEntityById(it) ?: throw IllegalStateException("존재하지 않는 categoryId => ${it}")
+            storeCategoryMapRepository.save(
+                StoreCategoryMap(
+                    store = store,
+                    category = category,
+                )
+            )
+        }
     }
 }
