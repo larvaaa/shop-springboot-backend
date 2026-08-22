@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsConfigurationSource
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
@@ -16,8 +17,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 @EnableWebFluxSecurity
 class SecurityConfig(
     private val authenticationManager: AuthenticationManager,
-    private val securityContextRepository: SecurityContextRepository,
     private val jwtAuthenticationWebFilter: JwtAuthenticationWebFilter,
+    private val customAuthenticationEntryPoint: ServerAuthenticationEntryPoint,
 ) {
 
     @Bean
@@ -28,8 +29,8 @@ class SecurityConfig(
             .formLogin { it.disable() } // Form 로그인 비활성화
             .httpBasic { it.disable() } // Http Basic 인증 비활성화
             .authenticationManager(authenticationManager)
-            .securityContextRepository(securityContextRepository)
             .addFilterAt(jwtAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+            .exceptionHandling { it.authenticationEntryPoint(customAuthenticationEntryPoint) }
             .authorizeExchange { exchanges ->
                 exchanges.pathMatchers(HttpMethod.OPTIONS).permitAll()
                 exchanges

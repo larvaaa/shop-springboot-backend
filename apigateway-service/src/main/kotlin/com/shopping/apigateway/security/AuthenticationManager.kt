@@ -31,7 +31,7 @@ class AuthenticationManager(
             // 3. 권한(Role) 처리 - 타입 캐스팅 안전하게 처리
             // claims["role"]이 List<String> 형태라고 가정
             @Suppress("UNCHECKED_CAST")
-            val roles = claims["role"] as? List<String> ?: emptyList()
+            val roles = claims["roles"] as? List<String> ?: emptyList()
 
             val authorities = roles.map { SimpleGrantedAuthority(it) }
 
