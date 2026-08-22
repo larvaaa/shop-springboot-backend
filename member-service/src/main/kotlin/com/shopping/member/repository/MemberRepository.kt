@@ -28,6 +28,7 @@ class MemberRepositoryCustomImpl(
     private val jPAQueryFactory: JPAQueryFactory
 ) : MemberRepositoryCustom {
 
+    // TODO: 일대다 관계에서 중복 발생... 수정 필요...
     override fun findMemberAndAuthority(username: String): MemberDto {
 
         return jPAQueryFactory

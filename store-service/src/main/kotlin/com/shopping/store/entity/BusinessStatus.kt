@@ -7,7 +7,6 @@ enum class BusinessStatus(val code: Int) {
     OPEN(1),
     CLOSED(2),
     PREPARING(3),
-    SUSPENDED(4),
 }
 
 // db에는 1,2,3,4로 저장 하기위한 설정
